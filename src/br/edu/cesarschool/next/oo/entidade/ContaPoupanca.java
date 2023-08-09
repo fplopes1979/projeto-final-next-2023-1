@@ -1,10 +1,10 @@
 package br.edu.cesarschool.next.oo.entidade;
 
+import java.io.Serializable;
+
 public class ContaPoupanca extends ContaCorrente {
 
     private double percentualBonus;
-
-
 
     public ContaPoupanca(double percentualBonus) {
         this.percentualBonus = percentualBonus;
@@ -34,4 +34,10 @@ public class ContaPoupanca extends ContaCorrente {
 
         return super.toString() + "\nPercentual de Bonus: " + percentualBonus;
     }
+
+    @Override
+    public double obterAliquotaCPMF() {
+        return 0;
+    }
+
 }

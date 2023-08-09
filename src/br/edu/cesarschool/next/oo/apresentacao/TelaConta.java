@@ -3,9 +3,11 @@ package br.edu.cesarschool.next.oo.apresentacao;
 import br.edu.cesarschool.next.oo.entidade.ContaCorrente;
 import br.edu.cesarschool.next.oo.entidade.ContaPoupanca;
 import br.edu.cesarschool.next.oo.entidade.Produto;
+import br.edu.cesarschool.next.oo.entidade.RegistroIdentificavel;
 import br.edu.cesarschool.next.oo.negocio.MediatorContaCorrente;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -29,7 +31,8 @@ public class TelaConta {
             System.out.println("4- Buscar");
             System.out.println("5- Gerar Relatório Geral de Contas");
             System.out.println("6- Excluir conta");
-            System.out.println("7- Sair");
+            System.out.println("7- Excluir todas as contas com saldo zero");
+            System.out.println("8- Sair");
             System.out.print("Escolha uma opção: ");
 
             opcao = scanner.nextInt();
@@ -45,7 +48,9 @@ public class TelaConta {
                 gerarRelatorioGeralDeContas();
             } else if (opcao == 6) {
                 excluir();
-            }else if (opcao == 7) {
+            } else if(opcao == 7) {
+                excluirContasZeradas();
+            }else if (opcao == 8) {
                 System.out.println("--- Programa encerrado ---");
                 return;
             } else {
@@ -73,7 +78,7 @@ public class TelaConta {
             String mensagem = mediatorContaCorrente.incluir(contaPoupanca);
 
             if (mensagem == null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM, dd, yyyy HH:mm:ss");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd, MMM, yyyy HH:mm:ss");
                 String formattedDateTime = contaPoupanca.getDataHoraCriacao().format(formatter);
                 System.out.println("Conta poupança incluída com sucesso. Data e hora: " + formattedDateTime + "\n");
             } else {
@@ -85,7 +90,7 @@ public class TelaConta {
             String mensagem = mediatorContaCorrente.incluir(contaCorrente);
 
             if (mensagem == null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM, dd, yyyy HH:mm:ss");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd, MMM, yyyy HH:mm:ss");
                 String formattedDateTime = contaCorrente.getDataHoraCriacao().format(formatter);
                 System.out.println("Conta corrente incluída com sucesso. Data e hora: " + formattedDateTime + "\n");
             } else {
@@ -146,6 +151,18 @@ public class TelaConta {
             System.out.println("Conta excluida com sucesso.");
         } else {
             System.out.println(mensagem);
+        }
+    }
+
+    private void excluirContasZeradas() {
+
+        List<ContaCorrente> contas = mediatorContaCorrente.gerarRelatorioGeral();
+        for (ContaCorrente conta : contas) {
+            double saldo = conta.getSaldo();
+            if (saldo == 0) {
+                mediatorContaCorrente.excluir(conta.getNumero());
+                System.out.println("\nA conta abaixo foi excluída: " + conta);
+            }
         }
     }
     private void gerarRelatorioGeralDeContas() {

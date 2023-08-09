@@ -80,7 +80,8 @@ public class MediatorContaCorrente {
             if (conta == null) {
                 return "Conta inexistente.";
             } else {
-                if (conta.getSaldo() < valor) {
+                double valorComCPMF = valor + (valor * conta.obterAliquotaCPMF());
+                if (conta.getSaldo() < valorComCPMF) {
                     return "O valor solicitado excede o saldo da conta.";
                 } else {
                     conta.debitar(valor);
