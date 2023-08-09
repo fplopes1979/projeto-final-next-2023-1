@@ -66,6 +66,6 @@ public class ContaCorrente extends Conta implements Serializable {
 
     @Override
     public double obterAliquotaCPMF() {
-        return 0.30;
+        return 0.003;
     }
 }
